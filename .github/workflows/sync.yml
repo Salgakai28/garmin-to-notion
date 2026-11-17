@@ -52,7 +52,7 @@ jobs:
 
         run: 
    
-          python -m garmin_to_notion sleep
-          python -m garmin_to_notion steps
-          python -m garmin_to_notion records
+          python -m garmin_to_notion sleep &&
+          python -m garmin_to_notion steps &&
+          python -m garmin_to_notion records &&
           python -m garmin_to_notion activities
