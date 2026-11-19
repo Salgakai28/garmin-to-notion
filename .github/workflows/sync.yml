@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: '0 6 * * *'
   workflow_dispatch:
-    types: [garmin-sync] # 新增：允許外部 API 即時觸發
+    #types: [garmin-sync] # 新增：允許外部 API 即時觸發
 jobs:
   sync:
     runs-on: ubuntu-latest
