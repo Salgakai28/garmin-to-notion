@@ -8,6 +8,16 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    env:
+      GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
+      GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
+      GARMIN_TOKENS: ${{ secrets.GARMIN_TOKENS }}
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      GARMIN_TOKENSTORE: ~/.garmin_tokens
+      TIMEZONE: ${{ vars.TIMEZONE || 'UTC' }}
+      GARMIN_DAYS_BACK: ${{ vars.GARMIN_DAYS_BACK || '30' }}
+      GARMIN_ACTIVITIES_FETCH_LIMIT: ${{ vars.GARMIN_ACTIVITIES_FETCH_LIMIT || '1000' }}
+      PYTHONPATH: src
     steps:
       - uses: actions/checkout@v4
 
@@ -38,31 +48,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-        env:
-          GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
-          GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
-          GARMIN_TOKENS: ${{ secrets.GARMIN_TOKENS }}
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          GARMIN_TOKENSTORE: ~/.garmin_tokens
-          TIMEZONE: ${{ vars.TIMEZONE || 'UTC' }}
-          GARMIN_DAYS_BACK: ${{ vars.GARMIN_DAYS_BACK || '30' }}
-          GARMIN_ACTIVITIES_FETCH_LIMIT: ${{ vars.GARMIN_ACTIVITIES_FETCH_LIMIT || '1000' }}
-          PYTHONPATH: src
-      # ...checkout、Python、cache、安裝依賴維持原樣...
       - name: Sync activities
         run: python -m garmin_to_notion activities
+
       - name: Sync records
         if: always()
         run: python -m garmin_to_notion records
+
       - name: Sync sleep
         if: always()
         run: python -m garmin_to_notion sleep
+
       - name: Sync steps
         if: always()
         run: python -m garmin_to_notion steps
+
       - name: Sync workouts
         if: always()
         run: python -m garmin_to_notion workouts
+
       - name: Sync summary
         if: always()
         run: python -m garmin_to_notion summary
