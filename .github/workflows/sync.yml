@@ -49,10 +49,22 @@ jobs:
           GARMIN_DAYS_BACK: ${{ vars.GARMIN_DAYS_BACK || '30' }}
           GARMIN_ACTIVITIES_FETCH_LIMIT: ${{ vars.GARMIN_ACTIVITIES_FETCH_LIMIT || '1000' }}
           PYTHONPATH: src
-
-        run: 
-   
-          python -m garmin_to_notion sleep &&
-          python -m garmin_to_notion steps &&
-          python -m garmin_to_notion records &&
-          python -m garmin_to_notion activities
+   steps:
+      # ...checkout、Python、cache、安裝依賴維持原樣...
+      - name: Sync activities
+        run: python -m garmin_to_notion activities
+      - name: Sync records
+        if: always()
+        run: python -m garmin_to_notion records
+      - name: Sync sleep
+        if: always()
+        run: python -m garmin_to_notion sleep
+      - name: Sync steps
+        if: always()
+        run: python -m garmin_to_notion steps
+      - name: Sync workouts
+        if: always()
+        run: python -m garmin_to_notion workouts
+      - name: Sync summary
+        if: always()
+        run: python -m garmin_to_notion summary
