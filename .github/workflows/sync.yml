@@ -38,7 +38,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run sync
         env:
           GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
           GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
@@ -49,7 +48,6 @@ jobs:
           GARMIN_DAYS_BACK: ${{ vars.GARMIN_DAYS_BACK || '30' }}
           GARMIN_ACTIVITIES_FETCH_LIMIT: ${{ vars.GARMIN_ACTIVITIES_FETCH_LIMIT || '1000' }}
           PYTHONPATH: src
-   steps:
       # ...checkout、Python、cache、安裝依賴維持原樣...
       - name: Sync activities
         run: python -m garmin_to_notion activities
